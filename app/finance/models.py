@@ -1,7 +1,7 @@
 import uuid as uuid
 from django.db import models
 
-from app.info.models import Workers
+from info.models import Workers
 
 
 # Единица измерения

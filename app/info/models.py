@@ -1,27 +1,90 @@
 import uuid as uuid
 from django.db import models
 
-from app.finance.models import UnitMeas
+
+class Phone(models.Model):
+    uuid = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        unique=True)
+
+    phone = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Phone"
+    )
+
+    created = models.DateTimeField(
+        auto_now_add=True,
+        null=True,
+        blank=True,
+        verbose_name="Created Date"
+    )
+
+    class Meta:
+        verbose_name = 'Phone'
+        verbose_name_plural = 'Phones'
+
+    def __str__(self):
+        return self.phone
 
 
-# # Единица измерения
-# class UnitMeas(models.Model):
-#     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
-#
-#     name = models.CharField(
-#         max_length=155,
-#         default=None,
-#         null=True,
-#         blank=True,
-#         verbose_name="Name"
-#     )
-#
-#     class Meta:
-#         verbose_name = 'Unit measurements'
-#         verbose_name_plural = 'Unit measurements'
-#
-#     def __str__(self):
-#         return self.name
+class Client(models.Model):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+
+    isActive = models.BooleanField(
+        default=True,
+        null=True,
+        blank=True,
+        verbose_name="Active"
+    )
+
+    name = models.CharField(
+        max_length=155,
+        default=None,
+        null=False,
+        blank=False,
+        verbose_name="Name"
+    )
+
+    desc = models.TextField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Desc"
+    )
+
+    phone = models.ManyToManyField(
+        Phone,
+        blank=True,
+        verbose_name="Phones"
+    )
+
+    details = models.TextField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Details"
+    )
+
+    created = models.DateTimeField(
+        auto_now_add=True,
+        null=True,
+        blank=True,
+        verbose_name="Created Date"
+    )
+
+    class Meta:
+        verbose_name = 'Client'
+        verbose_name_plural = 'Clients'
+
+    def __str__(self):
+        return self.name
 
 
 class Meet(models.Model):
@@ -41,20 +104,12 @@ class Meet(models.Model):
         verbose_name="No"
     )
 
-    name = models.CharField(
-        max_length=155,
-        default=None,
-        null=True,
-        blank=True,
-        verbose_name="Name"
-    )
-
-    phone = models.CharField(
-        max_length=155,
-        default=None,
-        null=True,
-        blank=True,
-        verbose_name="Phone"
+    client = models.ForeignKey(
+        Client,
+        null=False,
+        blank=False,
+        on_delete=models.PROTECT,
+        verbose_name="Client"
     )
 
     datetime = models.CharField(
@@ -85,7 +140,7 @@ class Meet(models.Model):
         verbose_name_plural = 'Meets'
 
     def __str__(self):
-        return self.name
+        return self.client
 
 
 class OfferUnit(models.Model):
@@ -130,7 +185,7 @@ class OfferUnit(models.Model):
     )
 
     unitMeas = models.ForeignKey(
-        UnitMeas,
+        'finance.UnitMeas',
         null=False,
         blank=False,
         on_delete=models.PROTECT,
@@ -144,26 +199,61 @@ class OfferUnit(models.Model):
         verbose_name="Quantity"
     )
 
+    price_sell_usd = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Price (Sell in USD)"
+    )
+
+    amount_usd = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Amount (USD)"
+    )
+
+    expenses_price = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Expenses Price"
+    )
+
+    expenses_other = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Expenses Other"
+    )
+
+    expenses_shipping = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Expenses shipping"
+    )
+
+    income_from_sales_perc = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Income from sales (Percent)"
+    )
+
+    income_from_sales_usd = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Income from sales (USD)"
+    )
+
     details = models.TextField(
         max_length=155,
         default=None,
         null=True,
         blank=True,
         verbose_name="Details"
-    )
-
-    price_sell = models.FloatField(
-        default=None,
-        null=True,
-        blank=True,
-        verbose_name="Amount AMD"
-    )
-
-    amount_amd = models.FloatField(
-        default=None,
-        null=True,
-        blank=True,
-        verbose_name="Amount AMD"
     )
 
     class Meta:
@@ -191,20 +281,12 @@ class Offers(models.Model):
         verbose_name="No"
     )
 
-    client = models.CharField(
-        max_length=155,
-        default=None,
-        null=True,
-        blank=True,
+    client = models.ForeignKey(
+        Client,
+        null=False,
+        blank=False,
+        on_delete=models.PROTECT,
         verbose_name="Client"
-    )
-
-    phone = models.CharField(
-        max_length=155,
-        default=None,
-        null=True,
-        blank=True,
-        verbose_name="Phone"
     )
 
     datetime = models.CharField(
@@ -226,7 +308,7 @@ class Offers(models.Model):
     offer_unit = models.ManyToManyField(
         OfferUnit,
         blank=True,
-        verbose_name="Carriers"
+        verbose_name="Offer Unit"
     )
 
     created = models.DateTimeField(
@@ -241,7 +323,7 @@ class Offers(models.Model):
         verbose_name_plural = 'Offers'
 
     def __str__(self):
-        return self.client
+        return f'${self.client}'
 
 
 class Orders(models.Model):
@@ -261,11 +343,11 @@ class Orders(models.Model):
         verbose_name="No"
     )
 
-    client = models.CharField(
-        max_length=155,
-        default=None,
-        null=True,
-        blank=True,
+    client = models.ForeignKey(
+        Client,
+        null=False,
+        blank=False,
+        on_delete=models.PROTECT,
         verbose_name="Client"
     )
 
@@ -538,6 +620,13 @@ class JobsInfo(models.Model):
         verbose_name="Details"
     )
 
+    date = models.DateField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Date"
+    )
+
     created = models.DateTimeField(
         auto_now_add=True,
         null=True,
@@ -571,14 +660,6 @@ class Jobs(models.Model):
         verbose_name="Client"
     )
 
-    JobName = models.CharField(
-        max_length=155,
-        default=None,
-        null=True,
-        blank=True,
-        verbose_name="Job Name"
-    )
-
     details = models.TextField(
         max_length=155,
         default=None,
@@ -602,10 +683,10 @@ class Jobs(models.Model):
         verbose_name="Phone"
     )
 
-    data = models.ManyToManyField(
+    jobInfo = models.ManyToManyField(
         JobsInfo,
         blank=False,
-        verbose_name="Data"
+        verbose_name="jobInfo"
     )
 
     created = models.DateTimeField(
@@ -621,3 +702,66 @@ class Jobs(models.Model):
 
     def __str__(self):
         return self.client
+
+
+class Provider(models.Model):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+
+    isActive = models.BooleanField(
+        default=True,
+        null=True,
+        blank=True,
+        verbose_name="Active"
+    )
+
+    Contact_person = models.CharField(
+        max_length=155,
+        default=None,
+        null=False,
+        blank=False,
+        verbose_name="Contact Person"
+    )
+
+    Firm = models.TextField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Firm"
+    )
+
+    desc = models.TextField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Desc"
+    )
+
+    phone = models.ManyToManyField(
+        Phone,
+        blank=True,
+        verbose_name="Phones"
+    )
+
+    details = models.TextField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Details"
+    )
+
+    created = models.DateTimeField(
+        auto_now_add=True,
+        null=True,
+        blank=True,
+        verbose_name="Created Date"
+    )
+
+    class Meta:
+        verbose_name = 'Provider'
+        verbose_name_plural = 'Providers'
+
+    def __str__(self):
+        return self.Contact_person
