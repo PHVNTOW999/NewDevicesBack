@@ -72,8 +72,7 @@ class CurrencyAdmin(admin.ModelAdmin):
 @admin.register(models.Carriers)
 class CarriersAdmin(admin.ModelAdmin):
     list_display = (
-        'fromCountry',
-        'toCountry',
+        'description',
         'uuid'
     )
 
@@ -81,6 +80,6 @@ class CarriersAdmin(admin.ModelAdmin):
 @admin.register(models.Transportations)
 class TransportationsAdmin(admin.ModelAdmin):
     list_display = (
-        'description',
+        'no',
         'uuid'
     )

@@ -58,6 +58,8 @@ class CompletedWorks(models.Model):
         verbose_name="Amount"
     )
 
+    # curr
+
     created = models.DateTimeField(
         auto_now_add=True,
         null=True,
@@ -71,71 +73,6 @@ class CompletedWorks(models.Model):
 
     def __str__(self):
         return self.work
-
-
-# Расчет зарплаты по дням
-class SalaryCalc(models.Model):
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
-
-    isActive = models.BooleanField(
-        default=True,
-        null=True,
-        blank=True,
-        verbose_name="Active"
-    )
-
-    worker = models.ForeignKey(
-        Workers,
-        null=False,
-        blank=False,
-        on_delete=models.PROTECT,
-        verbose_name="Worker"
-    )
-
-    no = models.IntegerField(
-        default=None,
-        null=True,
-        blank=True,
-        verbose_name="No"
-    )
-
-    date = models.DateField(
-        null=True,
-        blank=True,
-        verbose_name="Date"
-    )
-
-    time_start_work = models.TimeField(
-        null=True,
-        blank=True,
-        verbose_name="Time Start Work"
-    )
-
-    time_end_work = models.TimeField(
-        null=True,
-        blank=True,
-        verbose_name="Time Start Work"
-    )
-
-    CompletedWorks = models.ManyToManyField(
-        CompletedWorks,
-        blank=True,
-        verbose_name="Completed Works"
-    )
-
-    created = models.DateTimeField(
-        auto_now_add=True,
-        null=True,
-        blank=True,
-        verbose_name="Created Date"
-    )
-
-    class Meta:
-        verbose_name = 'SalaryCalc'
-        verbose_name_plural = 'SalaryCalc'
-
-    def __str__(self):
-        return f'{self.worker}'
 
 
 # Импорт Связаных продуктов из Армении
@@ -625,13 +562,7 @@ class Import(models.Model):
         verbose_name="Seller"
     )
 
-    phone = models.CharField(
-        max_length=155,
-        default=None,
-        null=True,
-        blank=True,
-        verbose_name="Phone"
-    )
+    # seller = fk = provoider
 
     description = models.TextField(
         max_length=155,
@@ -662,23 +593,15 @@ class Import(models.Model):
         return self.seller
 
 
-class Carriers(models.Model):
+# Склад
+class Repo(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
 
-    fromCountry = models.CharField(
-        max_length=155,
-        default=None,
+    isActive = models.BooleanField(
+        default=True,
         null=True,
         blank=True,
-        verbose_name="From Country"
-    )
-
-    toCountry = models.CharField(
-        max_length=155,
-        default=None,
-        null=True,
-        blank=True,
-        verbose_name="To Country"
+        verbose_name="Active"
     )
 
     carrier = models.CharField(
@@ -695,6 +618,22 @@ class Carriers(models.Model):
         null=True,
         blank=True,
         verbose_name="Phone"
+    )
+
+    fromCountry = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="From Country"
+    )
+
+    toCountry = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="To Country"
     )
 
     amount = models.CharField(
@@ -726,7 +665,7 @@ class Carriers(models.Model):
         default=None,
         null=True,
         blank=True,
-        verbose_name="Repository Date"
+        verbose_name="Repository Start Date"
     )
 
     repoExpectedTime = models.CharField(
@@ -746,13 +685,47 @@ class Carriers(models.Model):
     )
 
     class Meta:
+        verbose_name = 'Repo'
+        verbose_name_plural = 'Repos'
+
+    def __str__(self):
+        return self.carrier
+
+
+# Перевозчики
+class Carriers(models.Model):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+
+    isActive = models.BooleanField(
+        default=True,
+        null=True,
+        blank=True,
+        verbose_name="Active"
+    )
+
+    sellers = models.ManyToManyField(
+        Import,
+        blank=True,
+        verbose_name="Sellers"
+    )
+
+    description = models.TextField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Description"
+    )
+
+    class Meta:
         verbose_name = 'Carrier'
         verbose_name_plural = 'Carriers'
 
     def __str__(self):
-        return f'{self.fromCountry} - {self.toCountry}'
+        return f'{self.sellers}'
 
 
+# Перевозка
 class Transportations(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
 
@@ -770,18 +743,12 @@ class Transportations(models.Model):
         verbose_name="No"
     )
 
-    sellers = models.ManyToManyField(
-        Import,
-        blank=True,
-        verbose_name="Sellers"
-    )
-
-    description = models.TextField(
+    details = models.TextField(
         max_length=155,
         default=None,
         null=True,
         blank=True,
-        verbose_name="Description"
+        verbose_name="Details"
     )
 
     Carriers = models.ManyToManyField(
@@ -790,17 +757,108 @@ class Transportations(models.Model):
         verbose_name="Carriers"
     )
 
-    detailsForCarriers = models.TextField(
-        max_length=155,
-        default=None,
-        null=True,
-        blank=True,
-        verbose_name="Details For Carriers"
-    )
-
     class Meta:
         verbose_name = 'Transportation'
         verbose_name_plural = 'transportations'
 
     def __str__(self):
-        return f'{self.sellers}'
+        return f'{self.no}'
+
+
+# Расчет зарплаты по сотрудникам
+class SalaryCalcWorker(models.Model):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+
+    isActive = models.BooleanField(
+        default=True,
+        null=True,
+        blank=True,
+        verbose_name="Active"
+    )
+
+    worker = models.ForeignKey(
+        Workers,
+        null=False,
+        blank=False,
+        on_delete=models.PROTECT,
+        verbose_name="Worker"
+    )
+
+    created = models.DateTimeField(
+        auto_now_add=True,
+        null=True,
+        blank=True,
+        verbose_name="Created Date"
+    )
+
+    class Meta:
+        verbose_name = 'SalaryCalc'
+        verbose_name_plural = 'SalaryCalc'
+
+    def __str__(self):
+        return f'{self.worker}'
+
+
+# Расчет зарплаты по дням
+class SalaryCalc(models.Model):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+
+    isActive = models.BooleanField(
+        default=True,
+        null=True,
+        blank=True,
+        verbose_name="Active"
+    )
+
+    worker = models.ForeignKey(
+        SalaryCalcWorker,
+        null=False,
+        blank=False,
+        on_delete=models.PROTECT,
+        verbose_name="Worker"
+    )
+
+    no = models.IntegerField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="No"
+    )
+
+    date = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name="Date"
+    )
+
+    time_start_work = models.TimeField(
+        null=True,
+        blank=True,
+        verbose_name="Time Start Work"
+    )
+
+    time_end_work = models.TimeField(
+        null=True,
+        blank=True,
+        verbose_name="Time Start Work"
+    )
+
+    CompletedWorks = models.ManyToManyField(
+        CompletedWorks,
+        blank=True,
+        verbose_name="Completed Works"
+    )
+
+    created = models.DateTimeField(
+        auto_now_add=True,
+        null=True,
+        blank=True,
+        verbose_name="Created Date"
+    )
+
+    class Meta:
+        verbose_name = 'SalaryCalc'
+        verbose_name_plural = 'SalaryCalc'
+
+    def __str__(self):
+        return f'{self.worker}'
