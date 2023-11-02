@@ -8,5 +8,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path('api/curr/', Curr.as_view(), name='Currencies'),
     # info
-    path('api/info/', include('info.urls', namespace='info'))
+    path('api/info/', include('info.urls', namespace='info')),
 ]

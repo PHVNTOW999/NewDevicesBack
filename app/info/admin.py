@@ -6,7 +6,16 @@ from . import models
 @admin.register(models.Phone)
 class PhoneAdmin(admin.ModelAdmin):
     list_display = (
-        'phone',
+        'num',
+        'created',
+        'uuid'
+    )
+
+
+@admin.register(models.Email)
+class EmailAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
         'created',
         'uuid'
     )

@@ -3,12 +3,36 @@ from rest_framework import generics
 from .serializer import *
 
 
-class MeetsViewList(generics.ListAPIView):
+class PhoneViewList(generics.ListAPIView):
+    queryset = Phone.objects.all().order_by('-created')
+    serializer_class = PhoneSerializer
+
+    @staticmethod
+    def post(request, *args, **kwargs):
+        queryset = Phone.objects.create()
+
+        if request.data['num']:
+            queryset.num = request.data['num']
+
+        if request.data['desc']:
+            queryset.desc = request.data['desc']
+
+        queryset.save()
+
+        return HttpResponse(queryset)
+
+
+class ClientViewList(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
-        queryset = Meet.objects.all().order_by('-created').values()
-        serializer_class = MeetSerializer(queryset, many=True)
+        queryset = Client.objects.all().order_by('-created').values()
+        serializer_class = ClientSerializer(queryset, many=True)
 
         return JsonResponse(serializer_class.data, safe=False)
+
+
+class MeetsViewList(generics.ListAPIView):
+    queryset = Meet.objects.all().order_by('-created')
+    serializer_class = MeetSerializer
 
     @staticmethod
     def post(request, *args, **kwargs):
@@ -19,9 +43,6 @@ class MeetsViewList(generics.ListAPIView):
 
         if request.data['no']:
             queryset.no = request.data['no']
-
-        if request.data['name']:
-            queryset.name = request.data['name']
 
         if request.data['phone']:
             queryset.phone = request.data['phone']
@@ -41,8 +62,8 @@ class MeetView(generics.UpdateAPIView):
 
     def put(self, request, *args, **kwargs):
         queryset = Meet.objects.get(uuid=self.kwargs['uuid'])
-
         serializer = MeetSerializer(queryset, data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return HttpResponse(serializer.data)
@@ -51,10 +72,26 @@ class MeetView(generics.UpdateAPIView):
     def patch(self, request, *args, **kwargs):
         queryset = Meet.objects.get(uuid=self.kwargs['uuid'])
 
-        if request.data['datetime'] is "":
-            queryset.datetime = None
-            queryset.save()
-            return HttpResponse(queryset)
+        if request.data['phones'] is not '':
+            new_phone = Phone.objects.get(uuid=request.data['phones'])
+            queryset.phones.add(new_phone)
+
+        if request.data['emails'] is not '':
+            new_email = Email.objects.get(uuid=request.data['emails'])
+            queryset.emails.add(new_email)
+
+        queryset.save()
+        serializer_class = MeetSerializer(queryset)
+
+        return HttpResponse(serializer_class.data)
+
+    # def patch(self, request, *args, **kwargs):
+    #     queryset = Meet.objects.get(uuid=self.kwargs['uuid'])
+    #
+    #     if request.data['datetime'] is "":
+    #         queryset.datetime = None
+    #         queryset.save()
+    #         return HttpResponse(queryset)
 
     def delete(self, request, *args, **kwargs):
         queryset = Meet.objects.get(uuid=self.kwargs['uuid']).delete()

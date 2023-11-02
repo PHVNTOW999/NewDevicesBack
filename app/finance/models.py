@@ -1,7 +1,7 @@
 import uuid as uuid
 from django.db import models
 
-from info.models import Workers
+from info.models import Workers, Provider
 
 
 # Единица измерения
@@ -73,6 +73,305 @@ class CompletedWorks(models.Model):
 
     def __str__(self):
         return self.work
+
+
+class CraftUnitExpenses(models.Model):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+
+    isActive = models.BooleanField(
+        default=True,
+        null=True,
+        blank=True,
+        verbose_name="Active"
+    )
+
+    no = models.IntegerField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="No"
+    )
+
+    name = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Name"
+    )
+
+    description = models.TextField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Description"
+    )
+
+    quantity = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Quantity"
+    )
+
+    price = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Price"
+    )
+
+    date = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Order Date"
+    )
+
+    created = models.DateTimeField(
+        auto_now_add=True,
+        null=True,
+        blank=True,
+        verbose_name="Created Date"
+    )
+
+    class Meta:
+        verbose_name = 'Craft Unit Expenses'
+        verbose_name_plural = 'Craft Units Expenses'
+
+    def __str__(self):
+        return self.name
+
+
+class CraftUnit(models.Model):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+
+    isActive = models.BooleanField(
+        default=True,
+        null=True,
+        blank=True,
+        verbose_name="Active"
+    )
+
+    no = models.IntegerField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="No"
+    )
+
+    name = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Name"
+    )
+
+    description = models.TextField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Description"
+    )
+
+    date_start = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Date Start"
+    )
+
+    quantity = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Quantity"
+    )
+
+    price = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Price"
+    )
+
+    date_expected = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Date Challenge"
+    )
+
+    date_end = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Date End"
+    )
+
+    details = models.TextField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Details"
+    )
+
+    expenses = models.ManyToManyField(
+        CraftUnitExpenses,
+        blank=True,
+        verbose_name="Expenses"
+    )
+
+    created = models.DateTimeField(
+        auto_now_add=True,
+        null=True,
+        blank=True,
+        verbose_name="Created Date"
+    )
+
+    class Meta:
+        verbose_name = 'CraftUnit'
+        verbose_name_plural = 'CraftUnits'
+
+    def __str__(self):
+        return self.name
+
+
+# Разработка
+class Craft(models.Model):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+
+    isActive = models.BooleanField(
+        default=True,
+        null=True,
+        blank=True,
+        verbose_name="Active"
+    )
+
+    no = models.IntegerField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="No"
+    )
+
+    name = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Name"
+    )
+
+    date_start = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Date Start"
+    )
+
+    date_challenge = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Date Challenge"
+    )
+
+    date_end = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Date End"
+    )
+
+    sell_retail_price = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Sell Retail Price"
+    )
+
+    sell_retail_perc = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Sell Retail Percent"
+    )
+
+    sell_wholesale_price = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Sell Wholesale Price"
+    )
+
+    sell_wholesale_perc = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Sell Wholesale Percent"
+    )
+
+    rent_retail_price = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Rent Retail Price"
+    )
+
+    rent_retail_perc = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Rent Retail Percent"
+    )
+
+    rent_wholesale_price = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Rent Wholesale Price"
+    )
+
+    rent_wholesale_perc = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Rent Wholesale Percent"
+    )
+
+    description = models.TextField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Description"
+    )
+
+    created = models.DateTimeField(
+        auto_now_add=True,
+        null=True,
+        blank=True,
+        verbose_name="Created Date"
+    )
+
+    class Meta:
+        verbose_name = 'Craft'
+        verbose_name_plural = 'Crafts'
+
+    def __str__(self):
+        return self.name
 
 
 # Импорт Связаных продуктов из Армении
@@ -377,6 +676,13 @@ class ImportProducts(models.Model):
         verbose_name="Price"
     )
 
+    price_fact = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Price Fact"
+    )
+
     currency = models.ForeignKey(
         Currency,
         null=True,
@@ -418,6 +724,20 @@ class ImportProducts(models.Model):
         null=True,
         blank=True,
         verbose_name="Brutto Weight"
+    )
+
+    Customs_costs_price = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Customs Costs Price"
+    )
+
+    Customs_costs_perc = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Customs Costs Perc"
     )
 
     bankExpensesCurr = models.ForeignKey(
@@ -536,6 +856,48 @@ class ImportProducts(models.Model):
         return self.name
 
 
+# Продукт
+class Product(models.Model):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+
+    isActive = models.BooleanField(
+        default=True,
+        null=True,
+        blank=True,
+        verbose_name="Active"
+    )
+
+    no = models.IntegerField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="No"
+    )
+
+    name = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Name"
+    )
+
+    description = models.TextField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Description"
+    )
+
+    created = models.DateTimeField(
+        auto_now_add=True,
+        null=True,
+        blank=True,
+        verbose_name="Created date"
+    )
+
+
 # Импорт
 class Import(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
@@ -554,22 +916,58 @@ class Import(models.Model):
         verbose_name="No"
     )
 
-    seller = models.CharField(
-        max_length=155,
-        default=None,
-        null=True,
-        blank=True,
-        verbose_name="Seller"
+    seller = models.ForeignKey(
+        Provider,
+        null=False,
+        blank=False,
+        on_delete=models.PROTECT,
+        verbose_name="Currency"
     )
 
-    # seller = fk = provoider
+    paid_real = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Paid Real"
+    )
 
-    description = models.TextField(
+    paid_fact = models.FloatField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Paid Real"
+    )
+
+    date = models.DateField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Date"
+    )
+
+    to_dealer = models.CharField(
         max_length=155,
         default=None,
         null=True,
         blank=True,
-        verbose_name="Description"
+        verbose_name="To Dealer"
+    )
+
+    to_seller = models.ForeignKey(
+        Provider,
+        null=False,
+        blank=False,
+        on_delete=models.PROTECT,
+        related_name="to_seller",
+        verbose_name="To Seller"
+    )
+
+    details = models.TextField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Details"
     )
 
     products = models.ManyToManyField(
@@ -693,7 +1091,7 @@ class Repo(models.Model):
 
 
 # Перевозчики
-class Carriers(models.Model):
+class TransportationUnit(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
 
     isActive = models.BooleanField(
@@ -707,6 +1105,38 @@ class Carriers(models.Model):
         Import,
         blank=True,
         verbose_name="Sellers"
+    )
+
+    order_date = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Order Date"
+    )
+
+    ship_date = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Shipments Date"
+    )
+
+    expected_date = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Date Expected Time"
+    )
+
+    arrival_date = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Date Arrival Time"
     )
 
     description = models.TextField(
@@ -752,7 +1182,7 @@ class Transportations(models.Model):
     )
 
     Carriers = models.ManyToManyField(
-        Carriers,
+        TransportationUnit,
         blank=True,
         verbose_name="Carriers"
     )

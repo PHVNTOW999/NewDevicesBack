@@ -69,7 +69,7 @@ class CurrencyAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(models.Carriers)
+@admin.register(models.TransportationUnit)
 class CarriersAdmin(admin.ModelAdmin):
     list_display = (
         'description',

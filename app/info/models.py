@@ -9,12 +9,20 @@ class Phone(models.Model):
         editable=False,
         unique=True)
 
-    phone = models.CharField(
+    num = models.CharField(
         max_length=155,
         default=None,
         null=True,
         blank=True,
-        verbose_name="Phone"
+        verbose_name="Numbers"
+    )
+
+    desc = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Desc"
     )
 
     created = models.DateTimeField(
@@ -29,9 +37,74 @@ class Phone(models.Model):
         verbose_name_plural = 'Phones'
 
     def __str__(self):
-        return self.phone
+        return f'{self.num}'
 
 
+class Email(models.Model):
+    uuid = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        unique=True)
+
+    name = models.CharField(
+        max_length=155,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Email"
+    )
+
+    created = models.DateTimeField(
+        auto_now_add=True,
+        null=True,
+        blank=True,
+        verbose_name="Created Date"
+    )
+
+    class Meta:
+        verbose_name = 'Email'
+        verbose_name_plural = 'Emails'
+
+    def __str__(self):
+        return self.name
+
+
+class CommunicationMethod(models.Model):
+    uuid = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        unique=True)
+
+    phones = models.ManyToManyField(
+        Phone,
+        blank=True,
+        verbose_name="Phones"
+    )
+
+    emails = models.ManyToManyField(
+        Email,
+        blank=True,
+        verbose_name="Emails"
+    )
+
+    created = models.DateTimeField(
+        auto_now_add=True,
+        null=True,
+        blank=True,
+        verbose_name="Created Date"
+    )
+
+    class Meta:
+        verbose_name = 'CommunicationMethod'
+        verbose_name_plural = 'CommunicationMethods'
+
+    def __str__(self):
+        return f'{self.phones} - {self.emails}'
+
+
+# Клиент
 class Client(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
 
@@ -87,6 +160,7 @@ class Client(models.Model):
         return self.name
 
 
+# Встречи
 class Meet(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
 
@@ -109,12 +183,11 @@ class Meet(models.Model):
         null=False,
         blank=False,
         on_delete=models.PROTECT,
+        related_name="Client",
         verbose_name="Client"
     )
 
-    datetime = models.CharField(
-        max_length=155,
-        default=None,
+    datetime = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name="Datetime"
@@ -128,6 +201,26 @@ class Meet(models.Model):
         verbose_name="Details"
     )
 
+    phones = models.ManyToManyField(
+        Phone,
+        blank=True,
+        verbose_name="phones"
+    )
+
+    emails = models.ManyToManyField(
+        Email,
+        blank=True,
+        verbose_name="Emails"
+    )
+
+    # CommunicationMethod = models.ForeignKey(
+    #     CommunicationMethod,
+    #     null=False,
+    #     blank=False,
+    #     on_delete=models.PROTECT,
+    #     verbose_name="Communication Method"
+    # )
+
     created = models.DateTimeField(
         auto_now_add=True,
         null=True,
@@ -140,7 +233,7 @@ class Meet(models.Model):
         verbose_name_plural = 'Meets'
 
     def __str__(self):
-        return self.client
+        return f'{self.client} - {self.created}'
 
 
 class OfferUnit(models.Model):
