@@ -3,7 +3,7 @@ from rest_framework import generics
 from .serializer import *
 
 
-class PhoneViewList(generics.ListAPIView):
+class PhoneViewList(generics.UpdateAPIView):
     queryset = Phone.objects.all().order_by('-created')
     serializer_class = PhoneSerializer
 
@@ -19,7 +19,17 @@ class PhoneViewList(generics.ListAPIView):
 
         queryset.save()
 
-        return HttpResponse(queryset)
+        return HttpResponse(queryset.uuid)
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        print(request.data)
+
+        # if request.data['uuid'] is not '':
+        #     queryset = Phone.objects.get(uuid=request.data['uuid']).delete()
+        #     serializer_class = PhoneSerializer(queryset)
+
+        return JsonResponse(request.data, safe=False)
 
 
 class ClientViewList(generics.ListAPIView):
@@ -30,6 +40,7 @@ class ClientViewList(generics.ListAPIView):
         return JsonResponse(serializer_class.data, safe=False)
 
 
+# Meets
 class MeetsViewList(generics.ListAPIView):
     queryset = Meet.objects.all().order_by('-created')
     serializer_class = MeetSerializer
@@ -72,6 +83,11 @@ class MeetView(generics.UpdateAPIView):
     def patch(self, request, *args, **kwargs):
         queryset = Meet.objects.get(uuid=self.kwargs['uuid'])
 
+        if request.data['client'] is not '':
+            new_client_uuid = request.data['client']
+            new_client = Client.objects.get(uuid=new_client_uuid['uuid'])
+            queryset.client = new_client
+
         if request.data['phones'] is not '':
             new_phone = Phone.objects.get(uuid=request.data['phones'])
             queryset.phones.add(new_phone)
@@ -84,14 +100,6 @@ class MeetView(generics.UpdateAPIView):
         serializer_class = MeetSerializer(queryset)
 
         return HttpResponse(serializer_class.data)
-
-    # def patch(self, request, *args, **kwargs):
-    #     queryset = Meet.objects.get(uuid=self.kwargs['uuid'])
-    #
-    #     if request.data['datetime'] is "":
-    #         queryset.datetime = None
-    #         queryset.save()
-    #         return HttpResponse(queryset)
 
     def delete(self, request, *args, **kwargs):
         queryset = Meet.objects.get(uuid=self.kwargs['uuid']).delete()
