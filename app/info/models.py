@@ -35,6 +35,7 @@ class Phone(models.Model):
     class Meta:
         verbose_name = 'Phone'
         verbose_name_plural = 'Phones'
+        ordering = ['created']
 
     def __str__(self):
         return f'{self.num}'

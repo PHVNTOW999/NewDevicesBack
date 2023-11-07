@@ -4,12 +4,14 @@ from .views import *
 app_name = 'info'
 
 urlpatterns = [
-    #phones
-    path('phonelist/', PhoneViewList.as_view(), name='phone_list'),
     # meets
     path('meetlist/', MeetsViewList.as_view(), name='meet_list'),
     path('meet/<uuid:uuid>/', MeetView.as_view(), name='meet'),
 
+    # phones
+    path('phone/', PhoneView.as_view(), name='phone'),
+    path('phone/<uuid:uuid>/', PhoneView.as_view(), name='phone'),
+
     # clients
-    path('clientlist/', ClientViewList.as_view(), name='client_list'),
+    path('clientslist/', ClientsListView.as_view(), name='clients_list'),
 ]

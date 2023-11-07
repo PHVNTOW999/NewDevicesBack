@@ -17,8 +17,6 @@ class ClientSerializer(serializers.ModelSerializer):
 
 
 class MeetSerializer(serializers.ModelSerializer):
-    contacts = serializers.CharField(default='')
-
     class Meta:
         model = Meet
         depth = 2

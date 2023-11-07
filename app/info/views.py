@@ -3,10 +3,7 @@ from rest_framework import generics
 from .serializer import *
 
 
-class PhoneViewList(generics.UpdateAPIView):
-    queryset = Phone.objects.all().order_by('-created')
-    serializer_class = PhoneSerializer
-
+class PhoneView(generics.UpdateAPIView):
     @staticmethod
     def post(request, *args, **kwargs):
         queryset = Phone.objects.create()
@@ -21,18 +18,13 @@ class PhoneViewList(generics.UpdateAPIView):
 
         return HttpResponse(queryset.uuid)
 
-    @staticmethod
-    def get(request, *args, **kwargs):
-        print(request.data)
+    def delete(self, request, *args, **kwargs):
+        queryset = Phone.objects.get(uuid=self.kwargs['uuid']).delete()
 
-        # if request.data['uuid'] is not '':
-        #     queryset = Phone.objects.get(uuid=request.data['uuid']).delete()
-        #     serializer_class = PhoneSerializer(queryset)
-
-        return JsonResponse(request.data, safe=False)
+        return JsonResponse(queryset, safe=False)
 
 
-class ClientViewList(generics.ListAPIView):
+class ClientsListView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         queryset = Client.objects.all().order_by('-created').values()
         serializer_class = ClientSerializer(queryset, many=True)
