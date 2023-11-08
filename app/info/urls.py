@@ -12,6 +12,10 @@ urlpatterns = [
     path('phone/', PhoneView.as_view(), name='phone'),
     path('phone/<uuid:uuid>/', PhoneView.as_view(), name='phone'),
 
+    # phones
+    path('email/', EmailView.as_view(), name='email'),
+    path('email/<uuid:uuid>/', EmailView.as_view(), name='email'),
+
     # clients
     path('clientslist/', ClientsListView.as_view(), name='clients_list'),
 ]

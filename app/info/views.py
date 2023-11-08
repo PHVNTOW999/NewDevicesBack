@@ -24,6 +24,24 @@ class PhoneView(generics.UpdateAPIView):
         return JsonResponse(queryset, safe=False)
 
 
+class EmailView(generics.UpdateAPIView):
+    @staticmethod
+    def post(request, *args, **kwargs):
+        queryset = Email.objects.create()
+
+        if request.data['name']:
+            queryset.name = request.data['name']
+
+        queryset.save()
+
+        return HttpResponse(queryset.uuid)
+
+    def delete(self, request, *args, **kwargs):
+        queryset = Email.objects.get(uuid=self.kwargs['uuid']).delete()
+
+        return JsonResponse(queryset, safe=False)
+
+
 class ClientsListView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         queryset = Client.objects.all().order_by('-created').values()
