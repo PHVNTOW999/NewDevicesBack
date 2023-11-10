@@ -66,9 +66,9 @@ class MeetsViewList(generics.ListAPIView):
             queryset.no = request.data['no']
 
         if request.data['client']:
-            new_client = Client.objects.get(uuid=request.data['client'])
-
-            queryset.client = new_client
+            client_uuid = request.data['client']
+            client = Client.objects.get(uuid=client_uuid['uuid'])
+            queryset.client = client
 
         if request.data['datetime']:
             queryset.datetime = request.data['datetime']

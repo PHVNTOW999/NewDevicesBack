@@ -90,7 +90,7 @@ TIME_ZONE = 'Asia/Yerevan'
 
 USE_I18N = True
 
-USE_TZ = False
+USE_TZ = True
 
 STATIC_URL = 'static/'
 
