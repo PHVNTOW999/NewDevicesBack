@@ -59,14 +59,16 @@ class MeetsViewList(generics.ListAPIView):
     def post(request, *args, **kwargs):
         queryset = Meet.objects.create()
 
-        if request.data['isActive']:
-            queryset.isActive = request.data['isActive']
+        if request.data['isActive'] is not True:
+            queryset.isActive = False
 
         if request.data['no']:
             queryset.no = request.data['no']
 
-        if request.data['phone']:
-            queryset.phone = request.data['phone']
+        if request.data['client']:
+            new_client = Client.objects.get(uuid=request.data['client'])
+
+            queryset.client = new_client
 
         if request.data['datetime']:
             queryset.datetime = request.data['datetime']

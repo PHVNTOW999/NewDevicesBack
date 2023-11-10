@@ -181,8 +181,8 @@ class Meet(models.Model):
 
     client = models.ForeignKey(
         Client,
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         on_delete=models.PROTECT,
         related_name="Client",
         verbose_name="Client"
@@ -213,14 +213,6 @@ class Meet(models.Model):
         blank=True,
         verbose_name="Emails"
     )
-
-    # CommunicationMethod = models.ForeignKey(
-    #     CommunicationMethod,
-    #     null=False,
-    #     blank=False,
-    #     on_delete=models.PROTECT,
-    #     verbose_name="Communication Method"
-    # )
 
     created = models.DateTimeField(
         auto_now_add=True,
