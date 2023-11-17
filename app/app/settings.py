@@ -22,8 +22,8 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'https://195.80.238.204',
     'https://195.80.238.204:4000',
-    'https://195.80.238.204',
-    'https://195.80.238.204:4000',
+    'http://195.80.238.204',
+    'http://195.80.238.204:4000',
 ]
 
 CORS_ALLOW_METHODS = [
