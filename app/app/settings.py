@@ -7,8 +7,26 @@ SECRET_KEY = 'django-insecure-1fa1rtj39pv%jy6%2l5^+ifzq@mfe0m0@@sr2obgmiuwfd*qc*
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost',
-    '195.80.238.204'
+    'http://127.0.0.1',
+    'http://localhost',
+    'http://localhost:3000',
+    'https://195.80.238.204'
+]
+
+CORS_ORIGIN_WHITELIST = [
+    'http://127.0.0.1',
+    'http://localhost',
+    'http://localhost:3000',
+    'https://195.80.238.204'
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
 ]
 
 INSTALLED_APPS = [
@@ -63,9 +81,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
-SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
+# SECURE_SSL_REDIRECT = False
+# SESSION_COOKIE_SECURE = False
+# CSRF_COOKIE_SECURE = False
 
 DATABASES = {
     'default': {
