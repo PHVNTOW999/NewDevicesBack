@@ -10,14 +10,16 @@ ALLOWED_HOSTS = [
     'http://127.0.0.1',
     'http://localhost',
     'http://localhost:3000',
-    'https://195.80.238.204'
+    'https://195.80.238.204',
+    'https://195.80.238.204:4000'
 ]
 
 CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1',
     'http://localhost',
     'http://localhost:3000',
-    'https://195.80.238.204'
+    'https://195.80.238.204',
+    'https://195.80.238.204:4000'
 ]
 
 CORS_ALLOW_METHODS = [
