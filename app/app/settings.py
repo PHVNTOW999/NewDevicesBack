@@ -7,19 +7,23 @@ SECRET_KEY = 'django-insecure-1fa1rtj39pv%jy6%2l5^+ifzq@mfe0m0@@sr2obgmiuwfd*qc*
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    'localhost:3000',
-    '195.80.238.204',
-    '195.80.238.204:4000',
+    'http://127.0.0.1',
+    'http://localhost',
+    'http://localhost:3000',
+    'https://195.80.238.204',
+    'https://195.80.238.204:4000',
+    'http://195.80.238.204',
+    'http://195.80.238.204:4000',
 ]
 
 CORS_ORIGIN_WHITELIST = [
-    '127.0.0.1',
-    'localhost',
-    'localhost:3000',
-    '195.80.238.204',
-    '195.80.238.204:4000',
+    'http://127.0.0.1',
+    'http://localhost',
+    'http://localhost:3000',
+    'https://195.80.238.204',
+    'https://195.80.238.204:4000',
+    'https://195.80.238.204',
+    'https://195.80.238.204:4000',
 ]
 
 CORS_ALLOW_METHODS = [
