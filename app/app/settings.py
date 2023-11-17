@@ -4,7 +4,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-1fa1rtj39pv%jy6%2l5^+ifzq@mfe0m0@@sr2obgmiuwfd*qc*'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'http://127.0.0.1',
@@ -94,10 +94,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
-# CORS_REPLACE_HTTPS_REFERER = False
-HOST_SCHEME = "http://"
-# SECURE_PROXY_SSL_HEADER = None
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True
+
+# CORS_REPLACE_HTTPS_REFERER = False
+# HOST_SCHEME = "http://"
+# SECURE_PROXY_SSL_HEADER = None
+# SECURE_SSL_REDIRECT = True
 # SESSION_COOKIE_SECURE = False
 # CSRF_COOKIE_SECURE = False
 # SECURE_HSTS_SECONDS = None
