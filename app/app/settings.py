@@ -12,6 +12,7 @@ ALLOWED_HOSTS = [
     'http://localhost',
     'http://localhost:3000',
     '195.80.238.204',
+    '195.80.238.204:3000',
     '195.80.238.204:4000',
 ]
 
@@ -21,6 +22,7 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost',
     'http://localhost:3000',
     '195.80.238.204',
+    '195.80.238.204:3000',
     '195.80.238.204:4000',
 ]
 
@@ -30,6 +32,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost',
     'http://localhost:3000',
     'http://195.80.238.204',
+    'http://195.80.238.204:3000',
     'http://195.80.238.204:4000',
 ]
 
@@ -39,6 +42,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost',
     'http://localhost:3000',
     'http://195.80.238.204',
+    'http://195.80.238.204:3000',
     'http://195.80.238.204:4000',
 ]
 
