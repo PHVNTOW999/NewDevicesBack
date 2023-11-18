@@ -33,6 +33,15 @@ CORS_ALLOWED_ORIGINS = [
     'http://195.80.238.204:4000',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'http://127.0.0.1',
+    'http://127.0.0.1:8000',
+    'http://localhost',
+    'http://localhost:3000',
+    'http://195.80.238.204',
+    'http://195.80.238.204:4000',
+]
+
 
 CORS_ALLOW_METHODS = [
     'DELETE',
