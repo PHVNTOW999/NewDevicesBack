@@ -7,31 +7,32 @@ SECRET_KEY = 'django-insecure-1fa1rtj39pv%jy6%2l5^+ifzq@mfe0m0@@sr2obgmiuwfd*qc*
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'http://127.0.0.1',
+    '127.0.0.1',
+    '127.0.0.1:8000',
     'http://localhost',
     'http://localhost:3000',
-    'https://195.80.238.204',
-    'https://195.80.238.204:4000',
     'http://195.80.238.204',
     'http://195.80.238.204:4000',
-    '195.80.238.204',
-    '195.80.238.204:4000',
 ]
-
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = [
-    'http://127.0.0.1',
+    '127.0.0.1',
+    '127.0.0.1:8000',
     'http://localhost',
     'http://localhost:3000',
-    'https://195.80.238.204',
-    'https://195.80.238.204:4000',
     'http://195.80.238.204',
     'http://195.80.238.204:4000',
-    '195.80.238.204',
-    '195.80.238.204:4000',
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1',
+    'http://127.0.0.1:8000',
+    'http://localhost',
+    'http://localhost:3000',
+    'http://195.80.238.204',
+    'http://195.80.238.204:4000',
+]
+
 
 CORS_ALLOW_METHODS = [
     'DELETE',
@@ -41,6 +42,9 @@ CORS_ALLOW_METHODS = [
     'POST',
     'PUT',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -53,6 +57,7 @@ INSTALLED_APPS = [
     'info',
     'finance',
     'reports',
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
